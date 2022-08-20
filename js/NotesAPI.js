@@ -1,5 +1,5 @@
 export default class NotesAPI {
-    static getALLNOTES() {
+    static getAllNotes() {
         const notes = JSON.parse(localStorage.getItem("notesapp-notes") || "[]");
 
         return notes.sort((a, b) => {
@@ -8,10 +8,30 @@ export default class NotesAPI {
     }
 
     static saveNote(noteToSave) {
-        const notes = NotesAPI.getALLNOTES();
+        const notes = NotesAPI.getAllNotes();
+        const existing = notes.find(note => note.id == noteToSave.id);
 
-        notesToSave.id = Math.floor(Math.random() * 1000000);
-        notesToSave.updated = new Date().toISOString();
+        const CurrentDate = new Date();
+        //date format
+        const options = { 
+            weekday:"long", year:"numeric", month:"numeric", day:"numeric", 
+            hour:"numeric", minute:"numeric", second:"numeric", }
+
+        const TimeZoneOffSet = CurrentDate.getTimezoneOffset() / 60
+        
+        const DateFormat = CurrentDate.toLocaleString('en-us', options)
+
+        console.log(DateFormat + " | GMT-" + String(TimeZoneOffSet).padStart(2, '0') + "00")
+
+        // Edit/Update
+        if (existing) {
+            existing.title = noteToSave.title;            
+            existing.body = noteToSave.body;
+            existing.updated = new Date().toISOString();;
+        }
+
+        noteToSave.id = Math.floor(Math.random() * 1000000);
+        noteToSave.updated = CurrentDate.toISOString();
         notes.push(noteToSave);
 
         localStorage.setItem("notesapp-notes", JSON.stringify(notes));
@@ -21,3 +41,4 @@ export default class NotesAPI {
 
     }
 }
+

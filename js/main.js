@@ -5,4 +5,6 @@ NotesAPI.saveNote( {
     body: "I am a new note"
 })
 
-console.log(NotesAPI.getALLNOTES());
+
+
+console.log(NotesAPI.getAllNotes());
