@@ -9,7 +9,7 @@ export default class NotesAPI {
 
     static saveNote(noteToSave) {
         const notes = NotesAPI.getAllNotes();
-        const existing = notes.find(note => note.id == noteToSave.id);
+        
 
         const CurrentDate = new Date();
         //date format
@@ -23,22 +23,27 @@ export default class NotesAPI {
 
         console.log(DateFormat + " | GMT-" + String(TimeZoneOffSet).padStart(2, '0') + "00")
 
+        const existing = notes.find(note => note.id == noteToSave.id);
         // Edit/Update
         if (existing) {
             existing.title = noteToSave.title;            
             existing.body = noteToSave.body;
-            existing.updated = new Date().toISOString();;
+            existing.updated = CurrentDate.toISOString();
+        } else {
+            noteToSave.id = Math.floor(Math.random() * 1000000);
+            noteToSave.updated = CurrentDate.toISOString();
+            notes.push(noteToSave);
         }
 
-        noteToSave.id = Math.floor(Math.random() * 1000000);
-        noteToSave.updated = CurrentDate.toISOString();
-        notes.push(noteToSave);
 
         localStorage.setItem("notesapp-notes", JSON.stringify(notes));
     }
 
     static deleteNote(id) {
+        const notes = NotesAPI.getAllNotes();
+        const newNotes = notes.filter(note => note.id != id);
 
+        localStorage.setItem("notesapp-notes", JSON.stringify(newNotes))
     }
 }
 
