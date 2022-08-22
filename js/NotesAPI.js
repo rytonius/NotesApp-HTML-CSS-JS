@@ -10,7 +10,6 @@ export default class NotesAPI {
     static saveNote(noteToSave) {
         const notes = NotesAPI.getAllNotes();
         
-
         const CurrentDate = new Date();
         //date format
         const options = { 
@@ -34,7 +33,6 @@ export default class NotesAPI {
             noteToSave.updated = CurrentDate.toISOString();
             notes.push(noteToSave);
         }
-
 
         localStorage.setItem("notesapp-notes", JSON.stringify(notes));
     }

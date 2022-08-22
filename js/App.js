@@ -35,16 +35,33 @@ export default class App {
         return {
             onNoteSelect: noteID => {
                 console.log("Note selected: " + noteID);
+                const selectedNote = this.notes.find(note => note.id == noteID);
+                this._setActiveNote(selectedNote);
             },
             onNoteAdd: () => {
-                console.log("Note add");
+                const newNote = {
+                    title: "New Note",
+                    body: "Penny for your thoughts?"
+                };
+
+                NotesAPI.saveNote(newNote);
+                this._refreshNotes();
             },
             onNoteEdit: (title, body) => {
                 console.log(title, body);
+                NotesAPI.saveNote({
+                    id: this.activeNote.id,
+                    title,
+                    body
+                });
+
+                this._refreshNotes();
             },
             onNoteDelete: noteID => {
                 console.log("Note DELETED: " + noteID);
+                NotesAPI.deleteNote(noteID);
+                this._refreshNotes();
             },
         };
     }
-}
+}       
